@@ -97,7 +97,8 @@ spec:
             ip addr add 20.20.20.1 dev tunl0 && \
             echo 1 > /proc/sys/net/ipv4/ip_forward && \
             chmod +x /root/ipvs.sh && \
-            bash /root/ipvs.sh"
+            bash /root/ipvs.sh \
+            tcpdump -nnni any sctp port 36412"
         volumeMounts:
           - name: mme-addr-port
             mountPath: /root/mme_addr_port
