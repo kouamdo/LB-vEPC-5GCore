@@ -86,6 +86,8 @@ spec:
     metadata:
       labels:
         app: mme-lb-deploy
+      annotations:
+        "cni.projectcalico.org/ipAddrs": "[\"10.240.233.100\"]"
     spec:
       containers:
       - name: mme-lb
