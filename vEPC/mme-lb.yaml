@@ -1,35 +1,11 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mme-lb-deploy
-spec:
-  selector:
-    matchLabels:
-      app: mme-lb-deploy
-  template:
-    metadata:
-      labels:
-        app: mme-lb-deploy
-    spec:
-      containers:
-      - name: mme-lb-deploy
-        image: <Image>
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        ports:
-        - containerPort: <Port>
-
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mme-addr-port
 data:
   mme_addr_port: |
-    10.240.233.199:36412
-    10.240.233.200:36412
+    10.240.233.199
+    10.240.233.200
 
 ---
 apiVersion: v1
@@ -74,11 +50,11 @@ data:
         echo "Host $1 has been added"
       fi
     }
-
+    file='mme_addr_port'
     while true; do
-      for I in {103,104};do 
+      while read line;do 
 
-        Host=172.21.0.$I
+        Host=$line
 
         fping -c3 -t300 $Host 2>/dev/null 1>/dev/null
 
@@ -87,32 +63,50 @@ data:
           echo "Host $Host is up, proceeding to check if it is in the ipvsadm table and add if it is not in the ipvsadm table"
           add_realserver $Host
         else
-        echo "Host $Host is down, proceeding to check if it is in the ipvsadm"
-        del_realserver $Host
+          echo "Host $Host is down, proceeding to check if it is in the ipvsadm"
+          del_realserver $Host
         fi
         sleep 3
-      done
+      done < $file
     done
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: mme-lb-deploy
+  namespace: "default"
 spec:
-  containers:
-  - name: mme-lb
-    image: ubuntu:focal
-    command: ["sh -c"]
-    args:
-      - "apt-get update && apt-get install -y iptables ipvsadm iproute2 inetutils-ping fping tcpdump && \
-        ip link set up tunl0 && \
-        ip addr add 20.20.20.1 dev tunl0 && \
-        echo 1 > /proc/sys/net/ipv4/ip_forward && \
-        bash /root/ipvs.sh"
-    volumeMounts:
-      - name: ipvs-sh
-        mountPath: /root/ipvs.sh
-  volumes:
-    - name: ipvs-sh
-      configMap:
-        name: ipvs-sh-cmd
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mme-lb-deploy
+  template:
+    metadata:
+      labels:
+        app: mme-lb-deploy
+    spec:
+      containers:
+      - name: mme-lb
+        image: ubuntu:focal
+        command: ["sh -c"]
+        args:
+          - "apt-get update && apt-get install -y iptables ipvsadm iproute2 inetutils-ping fping tcpdump && \
+            ip link set up tunl0 && \
+            ip addr add 20.20.20.1 dev tunl0 && \
+            echo 1 > /proc/sys/net/ipv4/ip_forward && \
+            chmod +x /root/ipvs.sh && \
+            bash /root/ipvs.sh"
+        volumeMounts:
+          - name: mme-addr-port
+            mountPath: /root/mme_addr_port
+          - name: ipvs-sh
+            mountPath: /root/ipvs.sh
+      volumes:
+        - name: mme-addr-port
+          configMap:
+            name: mme-addr-port
+        - name: ipvs-sh
+          configMap:
+            name: ipvs-sh-cmd
