@@ -107,7 +107,7 @@ spec:
           - name: ipvs-sh
             mountPath: /root/ipvs.sh
         securityContext:
-          allowPrivilegeEscalation: false
+          privileged: true
       volumes:
         - name: mme-addr-port
           configMap:
