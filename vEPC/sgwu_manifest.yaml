@@ -1,0 +1,171 @@
+---
+# Source: open5gs-sgwu/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sgwu-open5gs-sgwu
+  labels:
+    app.kubernetes.io/name: open5gs-sgwu
+    helm.sh/chart: open5gs-sgwu-2.0.4
+    app.kubernetes.io/instance: sgwu
+    app.kubernetes.io/managed-by: Helm
+data:
+  sgwu.yaml: |
+    
+    
+    logger:
+      level: info
+    parameter: {}
+    
+    sgwu:
+      pfcp:
+        - dev: "eth0"
+          port: 8805
+      gtpu:
+        - dev:  eth0
+          port: 2152
+    
+    sgwc:
+      pfcp:
+        - name: sgwc-open5gs-sgwc-pfcp.default.svc.cluster.local
+          port: 8805
+---
+# Source: open5gs-sgwu/templates/service-gtpu.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sgwu-open5gs-sgwu-gtpu
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: open5gs-sgwu
+    helm.sh/chart: open5gs-sgwu-2.0.4
+    app.kubernetes.io/instance: sgwu
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: gtpu
+      port: 2152
+      protocol: UDP
+      targetPort: gtpu
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: open5gs-sgwu
+    app.kubernetes.io/instance: sgwu
+---
+# Source: open5gs-sgwu/templates/service-pfcp.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: sgwu-open5gs-sgwu-pfcp
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: open5gs-sgwu
+    helm.sh/chart: open5gs-sgwu-2.0.4
+    app.kubernetes.io/instance: sgwu
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: pfcp
+      port: 8805
+      protocol: UDP
+      targetPort: pfcp
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: open5gs-sgwu
+    app.kubernetes.io/instance: sgwu
+---
+# Source: open5gs-sgwu/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sgwu-open5gs-sgwu
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: open5gs-sgwu
+    helm.sh/chart: open5gs-sgwu-2.0.4
+    app.kubernetes.io/instance: sgwu
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: open5gs-sgwu
+      app.kubernetes.io/instance: sgwu
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: open5gs-sgwu
+        helm.sh/chart: open5gs-sgwu-2.0.4
+        app.kubernetes.io/instance: sgwu
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: open5gs-sgwu
+                    app.kubernetes.io/instance: sgwu
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: sgwu-open5gs-sgwu
+          image: docker.io/openverso/open5gs:2.4.9
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-sgwud"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: pfcp
+              containerPort: 8805
+              protocol: UDP
+            - name: gtpu
+              containerPort: 2152
+              protocol: UDP
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/
+      volumes:
+        - name: config
+          configMap:
+            name: sgwu-open5gs-sgwu
+---
+# Source: open5gs-sgwu/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: sgwu-open5gs-sgwu
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: sgwu-open5gs-sgwu
+
