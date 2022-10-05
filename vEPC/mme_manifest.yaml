@@ -465,7 +465,9 @@ spec:
           imagePullPolicy: "IfNotPresent"
           command: ["/bin/sh", "-c"]
           args: 
-            - open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
+            - sleep 10;
+              apt-get update;apt-get install tcpdump inetutils-ping -y;
+              open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
           securityContext:
             runAsNonRoot: true
             runAsUser: 1001
