@@ -463,8 +463,9 @@ spec:
         - name: mme-open5gs-mme
           image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
           imagePullPolicy: "IfNotPresent"
+          command: ["/bin/sh", "-c"]
           args: 
-            - "apt-get update && 
+            - apt-get update && 
             apt-get install tcpdump inetutils-ping -y &&
             ip link set up tunl0 && 
             ip addr add 20.20.20.1 dev tunl0 && 
@@ -476,7 +477,7 @@ spec:
             sysctl -w net.ipv4.conf.tunl0.rp_filter=2 && 
             apt-get update && apt-get install tcpdump inetutils-ping -y &&                
             echo 1 > /proc/sys/net/ipv4/ip_forward &&
-            open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf"
+            open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
           securityContext:
             runAsNonRoot: true
             runAsUser: 1001
