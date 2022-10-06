@@ -43,8 +43,8 @@ spec:
           configMap:
             name: mme-sh-config
         - name: diameter-config
-            configMap:
-              name: mme-open5gs-mme-diameter
+          configMap:
+            name: mme-open5gs-mme-diameter
         - name: config
           configMap:
             name: mme-open5gs-mme
