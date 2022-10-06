@@ -29,6 +29,8 @@ spec:
             - name: gtpc
               containerPort: 2123
               protocol: UDP          
+          securityContext:
+            allowPrivilegeEscalation: false
           volumeMounts:
             - name: diameter-config
               mountPath: /opt/open5gs/etc/freeDiameter/mme.conf
