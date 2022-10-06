@@ -465,7 +465,8 @@ spec:
           imagePullPolicy: "IfNotPresent"
           command: ["/bin/sh", "-c"]
           args: 
-            - open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
+            - bash /opt/open5gs/etc/freeDiameter/mme-sh.conf &&
+              open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
           securityContext:
             runAsNonRoot: true
             runAsUser: 1001
