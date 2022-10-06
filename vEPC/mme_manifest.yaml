@@ -488,6 +488,7 @@ spec:
               subPath: "mme.conf"
             - name: mme-conf-lb
               mountPath: /opt/open5gs/etc/freeDiameter/mme-sh.conf
+              subPath: mme-sh.conf
             - name: config
               mountPath:  /opt/open5gs/etc/open5gs/
       volumes:
