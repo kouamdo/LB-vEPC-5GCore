@@ -461,10 +461,12 @@ spec:
       priorityClassName: ""
       containers:
         - name: mme-open5gs-mme
-          image: docker.io/openverso/open5gs:2.4.9
+          image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
           imagePullPolicy: "IfNotPresent"
+          command: ["/bin/sh", "-c"]
           args: 
-            - "bash /opt/open5gs/etc/freeDiameter/mme-sh.conf && open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf"
+            - bash /opt/open5gs/etc/freeDiameter/mme-sh.conf &&
+              open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
           securityContext:
             runAsNonRoot: true
             runAsUser: 1001
