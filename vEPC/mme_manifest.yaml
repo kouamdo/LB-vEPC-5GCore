@@ -506,7 +506,6 @@ kind: ConfigMap
 metadata:
   name: mme-sh-config
 data:
-  data:
   mme-sh.conf: |
     ip link set up tunl0 && 
     ip addr add 20.20.20.1 dev tunl0 && 
