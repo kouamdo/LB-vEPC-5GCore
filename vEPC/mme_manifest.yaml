@@ -464,8 +464,7 @@ spec:
           image: docker.io/openverso/open5gs:2.4.9
           imagePullPolicy: "IfNotPresent"
           args: 
-            - "sleep 10 &&
-            apt-get update && 
+            - "apt-get update && 
             apt-get install tcpdump inetutils-ping -y &&
             ip link set up tunl0 && 
             ip addr add 20.20.20.1 dev tunl0 && 
@@ -476,7 +475,7 @@ spec:
             sysctl -w net.ipv4.conf.tunl0.arp_announce=2 && 
             sysctl -w net.ipv4.conf.tunl0.rp_filter=2 && 
             apt-get update && apt-get install tcpdump inetutils-ping -y &&                
-            echo 1 > /proc/sys/net/ipv4/ip_forward && sleep 5 &&
+            echo 1 > /proc/sys/net/ipv4/ip_forward &&
             open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf"
           securityContext:
             runAsNonRoot: true
