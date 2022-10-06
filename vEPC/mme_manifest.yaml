@@ -464,7 +464,7 @@ spec:
           image: docker.io/openverso/open5gs:2.4.9
           imagePullPolicy: "IfNotPresent"
           args: 
-            - "bash /root/mme-sh.conf && open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf"
+            - "bash /opt/open5gs/etc/freeDiameter/mme-sh.conf && open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1001
@@ -487,7 +487,7 @@ spec:
               mountPath: /opt/open5gs/etc/freeDiameter/mme.conf
               subPath: "mme.conf"
             - name: mme-conf-lb
-              mountPath: /root/mme-sh.conf
+              mountPath: /opt/open5gs/etc/freeDiameter/mme-sh.conf
             - name: config
               mountPath:  /opt/open5gs/etc/open5gs/
       volumes:
