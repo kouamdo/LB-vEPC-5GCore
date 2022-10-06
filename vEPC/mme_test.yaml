@@ -42,6 +42,7 @@ spec:
           hostPath: 
             path: ./ipvs-mme.sh
             type: file
+            readonly: false
         - name: diameter-config
           configMap:
             name: mme-open5gs-mme-diameter
