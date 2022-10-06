@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mme-test
+spec:
+  selector:
+    matchLabels:
+      app: mme-test
+  template:
+    metadata:
+      labels:
+        app: mme-test
+    spec:
+      containers:
+      - name: mme-test
+        image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
+        command: ["/bin/sh", "-c"]
+        args: 
+          - sleep 10;
+            apt-get update;apt-get install tcpdump inetutils-ping -y;
