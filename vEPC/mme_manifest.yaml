@@ -464,7 +464,7 @@ spec:
           image: docker.io/openverso/open5gs:2.4.9
           imagePullPolicy: "IfNotPresent"
           args: 
-            - "open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf"
+            - "apt-get update && apt-get install tcpdump inetutils-ping -y && open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf"
           securityContext:
             runAsNonRoot: true
             runAsUser: 1001
