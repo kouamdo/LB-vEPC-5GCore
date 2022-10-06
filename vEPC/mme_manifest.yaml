@@ -461,7 +461,7 @@ spec:
       priorityClassName: ""
       containers:
         - name: mme-open5gs-mme
-          image: docker.io/openverso/open5gs:2.4.9
+          image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
           imagePullPolicy: "IfNotPresent"
           args: 
             - "apt-get update && 
