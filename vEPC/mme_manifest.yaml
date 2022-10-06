@@ -465,8 +465,8 @@ spec:
           imagePullPolicy: "IfNotPresent"
           command: ["/bin/sh", "-c"]
           args: 
-            - chmod +x /opt/open5gs/etc/freeDiameter/mme-sh.conf && 
-              bash /opt/open5gs/etc/freeDiameter/mme-sh.conf &&
+            - chmod +x /opt/open5gs/etc/freeDiameter/mme-sh.sh && 
+              bash /opt/open5gs/etc/freeDiameter/mme-sh.sh &&
               open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
           securityContext:
             runAsNonRoot: true
@@ -490,8 +490,8 @@ spec:
               mountPath: /opt/open5gs/etc/freeDiameter/mme.conf
               subPath: "mme.conf"
             - name: mme-conf-lb
-              mountPath: /opt/open5gs/etc/freeDiameter/mme-sh.conf
-              subPath: mme-sh.conf
+              mountPath: /opt/open5gs/etc/freeDiameter/mme-sh.sh
+              subPath: mme-sh.sh
             - name: config
               mountPath:  /opt/open5gs/etc/open5gs/
       volumes:
@@ -510,7 +510,7 @@ kind: ConfigMap
 metadata:
   name: mme-sh-config
 data:
-  mme-sh.conf: |
+  mme-sh.sh: |
     ip link set up tunl0 && 
     ip addr add 20.20.20.1 dev tunl0 && 
     sysctl -w net.ipv4.conf.tunl0.rp_filter=0 && 
