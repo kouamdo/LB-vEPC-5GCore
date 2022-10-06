@@ -466,7 +466,6 @@ spec:
           command: ["/bin/sh", "-c"]
           args: 
             - sleep 10 &&
-            apt-get update;apt-get install tcpdump inetutils-ping -y &&
             ip link set up tunl0 && 
             ip addr add 20.20.20.1 dev tunl0 && 
             sysctl -w net.ipv4.conf.tunl0.rp_filter=0 && 
