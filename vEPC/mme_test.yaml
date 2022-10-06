@@ -30,7 +30,8 @@ spec:
               containerPort: 2123
               protocol: UDP          
           securityContext:
-            allowPrivilegeEscalation: false
+            allowPrivilegeEscalation: 
+            runAsUser: 0
           volumeMounts:
             - name: diameter-config
               mountPath: /opt/open5gs/etc/freeDiameter/mme.conf
