@@ -334,144 +334,37 @@ data:
         - name: core5g-smf.open5gs.svc.cluster.local
           port: 2123
 ---
-# Source: open5gs-mme/templates/service-frdi.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: mme-open5gs-mme-frdi
-  namespace: "default"
-  labels:
-    app.kubernetes.io/name: open5gs-mme
-    helm.sh/chart: open5gs-mme-2.0.3
-    app.kubernetes.io/instance: mme
-    app.kubernetes.io/managed-by: Helm
-spec:
-  type: ClusterIP
-  sessionAffinity: None
-  ports:
-    - name: frdi
-      port: 3868
-      targetPort: frdi
-      protocol: SCTP
-      nodePort: null
-  publishNotReadyAddresses: true
-  selector:
-    app.kubernetes.io/name: open5gs-mme
-    app.kubernetes.io/instance: mme
----
-# Source: open5gs-mme/templates/service-gtpc.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: mme-open5gs-mme-gtpc
-  namespace: "default"
-  labels:
-    app.kubernetes.io/name: open5gs-mme
-    helm.sh/chart: open5gs-mme-2.0.3
-    app.kubernetes.io/instance: mme
-    app.kubernetes.io/managed-by: Helm
-spec:
-  type: ClusterIP
-  sessionAffinity: None
-  ports:
-    - name: gtpc
-      port: 2123
-      targetPort: gtpc
-      protocol: UDP
-      nodePort: null
-  publishNotReadyAddresses: true
-  selector:
-    app.kubernetes.io/name: open5gs-mme
-    app.kubernetes.io/instance: mme
----
-# Source: open5gs-mme/templates/service-s1ap.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: mme-open5gs-mme-s1ap
-  namespace: "default"
-  labels:
-    app.kubernetes.io/name: open5gs-mme
-    helm.sh/chart: open5gs-mme-2.0.3
-    app.kubernetes.io/instance: mme
-    app.kubernetes.io/managed-by: Helm
-spec:
-  type: ClusterIP
-  sessionAffinity: None
-  ports:
-    - name: s1ap
-      port: 36412
-      targetPort: s1ap
-      protocol: SCTP
-      nodePort: null
-  publishNotReadyAddresses: true
-  selector:
-    app.kubernetes.io/name: open5gs-mme
-    app.kubernetes.io/instance: mme
----
-# Source: open5gs-mme/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mme-open5gs-mme
-  namespace: "default"
-  labels:
-    app.kubernetes.io/name: open5gs-mme
-    helm.sh/chart: open5gs-mme-2.0.3
-    app.kubernetes.io/instance: mme
-    app.kubernetes.io/managed-by: Helm
+  name: mme-1
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: open5gs-mme
-      app.kubernetes.io/instance: mme
-  strategy:
-    type: RollingUpdate
-  replicas: 1
+      app: mme-1
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: open5gs-mme
-        helm.sh/chart: open5gs-mme-2.0.3
-        app.kubernetes.io/instance: mme
-        app.kubernetes.io/managed-by: Helm
-      annotations:
-        "cni.projectcalico.org/ipAddrs": "[\"10.240.233.199\"]"
+        app: mme-1
     spec:
-      
-      securityContext:
-        fsGroup: 1001
-      affinity:
-        podAffinity:
-          
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/name: open5gs-mme
-                    app.kubernetes.io/instance: mme
-                namespaces:
-                  - "default"
-                topologyKey: kubernetes.io/hostname
-              weight: 1
-        nodeAffinity:
-          
-      serviceAccountName: default
-      priorityClassName: ""
       containers:
-        - name: mme-open5gs-mme
+        - name: mme-1
           image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
-          imagePullPolicy: "IfNotPresent"
           command: ["/bin/sh", "-c"]
           args: 
-            - chmod +x /opt/open5gs/etc/freeDiameter/mme-sh.sh && 
-              bash /opt/open5gs/etc/freeDiameter/mme-sh.sh &&
-              open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1001
-          envFrom:
+          - ip link set up tunl0; 
+            ip addr add 20.20.20.1 dev tunl0; 
+            sysctl -w net.ipv4.conf.tunl0.rp_filter=0; 
+            sysctl -w net.ipv4.conf.all.arp_ignore=1; 
+            sysctl -w net.ipv4.conf.all.arp_announce=2; 
+            sysctl -w net.ipv4.conf.tunl0.arp_ignore=1; 
+            sysctl -w net.ipv4.conf.tunl0.arp_announce=2; 
+            sysctl -w net.ipv4.conf.tunl0.rp_filter=2; 
+            apt-get update; 
+            apt-get install tcpdump inetutils-ping -y; 
+            echo 1 > /proc/sys/net/ipv4/ip_forward; 
+            sleep 5;
+            open5gs-mmed
           ports:
             - name: frdi
               containerPort: 3868
@@ -481,59 +374,19 @@ spec:
               protocol: SCTP
             - name: gtpc
               containerPort: 2123
-              protocol: UDP
-          resources:
-            limits: {}
-            requests: {}
+              protocol: UDP          
+          securityContext:
+            privileged: true
           volumeMounts:
             - name: diameter-config
               mountPath: /opt/open5gs/etc/freeDiameter/mme.conf
               subPath: "mme.conf"
-            - name: mme-conf-lb
-              mountPath: /opt/open5gs/etc/freeDiameter/mme-sh.sh
-              subPath: mme-sh.sh
             - name: config
               mountPath:  /opt/open5gs/etc/open5gs/
       volumes:
-        - name: mme-conf-lb
-          configMap:
-            name: mme-sh-config
         - name: diameter-config
           configMap:
             name: mme-open5gs-mme-diameter
         - name: config
           configMap:
             name: mme-open5gs-mme
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mme-sh-config
-data:
-  mme-sh.sh: |
-    ip link set up tunl0 && 
-    ip addr add 20.20.20.1 dev tunl0 && 
-    sysctl -w net.ipv4.conf.tunl0.rp_filter=0 && 
-    sysctl -w net.ipv4.conf.all.arp_ignore=1 && 
-    sysctl -w net.ipv4.conf.all.arp_announce=2 && 
-    sysctl -w net.ipv4.conf.tunl0.arp_ignore=1 && 
-    sysctl -w net.ipv4.conf.tunl0.arp_announce=2 && 
-    sysctl -w net.ipv4.conf.tunl0.rp_filter=2 && 
-    apt-get update && 
-    apt-get install tcpdump inetutils-ping -y && 
-    echo 1 > /proc/sys/net/ipv4/ip_forward && 
-    sleep 5
-
----
-# Source: open5gs-mme/templates/hpa.yaml
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: mme-open5gs-mme
-spec:
-  maxReplicas: 1
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: mme-open5gs-mme
-
