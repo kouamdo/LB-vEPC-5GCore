@@ -92,15 +92,15 @@ spec:
       containers:
       - name: mme-lb
         image: ubuntu:focal
-        command: ["sh -c"]
+        command: ["/bin/sh", "-c"]
         args:
-          - "apt-get update && apt-get install -y iptables ipvsadm iproute2 inetutils-ping fping tcpdump && \
-            ip link set up tunl0 && \
-            ip addr add 20.20.20.1 dev tunl0 && \
-            echo 1 > /proc/sys/net/ipv4/ip_forward && \
-            chmod +x /root/ipvs.sh && \
-            bash /root/ipvs.sh \
-            tcpdump -nnni any sctp port 36412"
+          - apt-get update && apt-get install -y iptables ipvsadm iproute2 inetutils-ping fping tcpdump 
+            ip link set up tunl0 
+            ip addr add 20.20.20.1 dev tunl0 
+            echo 1 > /proc/sys/net/ipv4/ip_forward; 
+            chmod +x /root/ipvs.sh; 
+            bash /root/ipvs.sh; 
+            tcpdump -nnni any sctp port 36412
         volumeMounts:
           - name: mme-addr-port
             mountPath: /root/mme_addr_port
