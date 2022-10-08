@@ -27,7 +27,8 @@ spec:
             apt-get update; 
             apt-get install tcpdump inetutils-ping -y; 
             echo 1 > /proc/sys/net/ipv4/ip_forward; 
-            sleep 5
+            sleep 5;
+            open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
           ports:
             - name: frdi
               containerPort: 3868
