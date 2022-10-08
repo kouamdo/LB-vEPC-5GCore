@@ -1,59 +1,3 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mme-test
-spec:
-  selector:
-    matchLabels:
-      app: mme-test
-  template:
-    metadata:
-      labels:
-        app: mme-test
-    spec:
-      containers:
-        - name: mme-test
-          image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
-          command: ["/bin/sh", "-c"]
-          args: 
-          - ip link set up tunl0; 
-            ip addr add 20.20.20.1 dev tunl0; 
-            sysctl -w net.ipv4.conf.tunl0.rp_filter=0; 
-            sysctl -w net.ipv4.conf.all.arp_ignore=1; 
-            sysctl -w net.ipv4.conf.all.arp_announce=2; 
-            sysctl -w net.ipv4.conf.tunl0.arp_ignore=1; 
-            sysctl -w net.ipv4.conf.tunl0.arp_announce=2; 
-            sysctl -w net.ipv4.conf.tunl0.rp_filter=2; 
-            apt-get update; 
-            apt-get install tcpdump inetutils-ping -y; 
-            echo 1 > /proc/sys/net/ipv4/ip_forward; 
-            sleep 5;
-            open5gs-mmed -c /opt/open5gs/etc/freeDiameter/mme.conf
-          ports:
-            - name: frdi
-              containerPort: 3868
-              protocol: SCTP
-            - name: s1ap
-              containerPort: 36412
-              protocol: SCTP
-            - name: gtpc
-              containerPort: 2123
-              protocol: UDP          
-          securityContext:
-            privileged: true
-          volumeMounts:
-            - name: diameter-config
-              mountPath: /opt/open5gs/etc/freeDiameter/mme.conf
-              subPath: "mme.conf"
-            - name: config
-              mountPath:  /opt/open5gs/etc/open5gs/
-      volumes:
-        - name: diameter-config
-          configMap:
-            name: mme-open5gs-mme-diameter
-        - name: config
-          configMap:
-            name: mme-open5gs-mme
 ---
 # Source: open5gs-mme/templates/configmap-diameter.yaml
 apiVersion: v1
@@ -389,3 +333,60 @@ data:
       gtpc:
         - name: core5g-smf.open5gs.svc.cluster.local
           port: 2123
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mme-test
+spec:
+  selector:
+    matchLabels:
+      app: mme-test
+  template:
+    metadata:
+      labels:
+        app: mme-test
+    spec:
+      containers:
+        - name: mme-test
+          image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
+          command: ["/bin/sh", "-c"]
+          args: 
+          - ip link set up tunl0; 
+            ip addr add 20.20.20.1 dev tunl0; 
+            sysctl -w net.ipv4.conf.tunl0.rp_filter=0; 
+            sysctl -w net.ipv4.conf.all.arp_ignore=1; 
+            sysctl -w net.ipv4.conf.all.arp_announce=2; 
+            sysctl -w net.ipv4.conf.tunl0.arp_ignore=1; 
+            sysctl -w net.ipv4.conf.tunl0.arp_announce=2; 
+            sysctl -w net.ipv4.conf.tunl0.rp_filter=2; 
+            apt-get update; 
+            apt-get install tcpdump inetutils-ping -y; 
+            echo 1 > /proc/sys/net/ipv4/ip_forward; 
+            sleep 5;
+            open5gs-mmed
+          ports:
+            - name: frdi
+              containerPort: 3868
+              protocol: SCTP
+            - name: s1ap
+              containerPort: 36412
+              protocol: SCTP
+            - name: gtpc
+              containerPort: 2123
+              protocol: UDP          
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: diameter-config
+              mountPath: /opt/open5gs/etc/freeDiameter/mme.conf
+              subPath: "mme.conf"
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/
+      volumes:
+        - name: diameter-config
+          configMap:
+            name: mme-open5gs-mme-diameter
+        - name: config
+          configMap:
+            name: mme-open5gs-mme
