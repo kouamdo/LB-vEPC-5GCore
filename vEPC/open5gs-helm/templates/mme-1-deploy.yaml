@@ -50,11 +50,7 @@ spec:
           subPath: "mme.yaml"
         - name: open5gs-mme-diameter
           mountPath: /open5gs/config-map/diameter-mme.conf
-          subPath: "diameter-mme.conf"
-        - mountPath: "/open5gs/diameter-ca/"
-          name: diameter-ca
-        - mountPath: "/open5gs/tls/"
-          name: mme-tls         
+          subPath: "diameter-mme.conf"         
       volumes:
         - name: open5gs-mme-config
           configMap:
