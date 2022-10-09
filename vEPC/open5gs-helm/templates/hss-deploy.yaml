@@ -54,10 +54,4 @@ spec:
             name: open5gs-hss-config
         - name: open5gs-hss-diameter
           configMap:
-            name: open5gs-hss-diameter           
-        - name: diameter-ca
-          secret:
-            secretName: {{ .Values.diameter.caSecretName }}  
-        - name: hss-tls
-          secret:
-            secretName: {{ .Values.hss.tlsSecretName }}                                               
+            name: open5gs-hss-diameter

@@ -55,10 +55,4 @@ spec:
             name: open5gs-pcrf-config
         - name: open5gs-pcrf-diameter
           configMap:
-            name: open5gs-pcrf-diameter       
-        - name: diameter-ca
-          secret:
-            secretName: {{ .Values.diameter.caSecretName }}    
-        - name: pcrf-tls
-          secret:
-            secretName: {{ .Values.pcrf.tlsSecretName }}                 
+            name: open5gs-pcrf-diameter              
