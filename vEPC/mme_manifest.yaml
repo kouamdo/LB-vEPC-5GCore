@@ -307,6 +307,7 @@ spec:
       containers:
         - name: mme-1
           image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
+          imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c"]
           args: 
           - ip link set up tunl0; 
