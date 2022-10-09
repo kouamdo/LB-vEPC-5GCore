@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: open5gs-pcrf
+  namespace: open5gs
   labels:
     epc-mode: pcrf
 spec:
@@ -31,8 +32,8 @@ spec:
     spec:      
       containers:
         - name: pcrf
-          image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
+          imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           command: ["/bin/sh", "-c"]
           args:
           - sleep 10;
@@ -43,11 +44,21 @@ spec:
             subPath: "pcrf.yaml"
           - name: open5gs-pcrf-diameter
             mountPath: /open5gs/config-map/diameter-pcrf.conf
-            subPath: "diameter-pcrf.conf"                                
+            subPath: "diameter-pcrf.conf"
+          - mountPath: "/open5gs/diameter-ca/"
+            name: diameter-ca
+          - mountPath: "/open5gs/tls/"
+            name: pcrf-tls                                    
       volumes:
         - name: open5gs-pcrf-config
           configMap:
             name: open5gs-pcrf-config
         - name: open5gs-pcrf-diameter
           configMap:
-            name: open5gs-pcrf-diameter           
+            name: open5gs-pcrf-diameter       
+        - name: diameter-ca
+          secret:
+            secretName: {{ .Values.diameter.caSecretName }}    
+        - name: pcrf-tls
+          secret:
+            secretName: {{ .Values.pcrf.tlsSecretName }}                 
