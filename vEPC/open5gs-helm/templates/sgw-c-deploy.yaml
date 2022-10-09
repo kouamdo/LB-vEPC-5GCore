@@ -6,7 +6,6 @@ metadata:
   labels:
     epc-mode: sgwc
 spec:
-  clusterIP: None
   selector:
     epc-mode: sgwc
   ports:

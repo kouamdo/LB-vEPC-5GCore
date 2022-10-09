@@ -6,7 +6,6 @@ metadata:
   labels:
     epc-mode: sgwu
 spec:
-  clusterIP: None
   selector:
     epc-mode: sgwu
   ports:
