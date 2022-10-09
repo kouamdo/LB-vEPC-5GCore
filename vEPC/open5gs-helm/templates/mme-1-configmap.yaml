@@ -38,7 +38,7 @@ data:
 
     sgwc:
         gtpc:
-          - name: open5gs-sgwc
+          - name: sgwc-open5gs-sgwc-gtpc
     smf:
       gtpc:
         - name: core5g-smf
