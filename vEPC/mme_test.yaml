@@ -344,6 +344,8 @@ spec:
       app: mme-test
   template:
     metadata:
+      annotations:
+        "cni.projectcalico.org/ipAddrs": "[\"10.240.233.198\"]"
       labels:
         app: mme-test
     spec:

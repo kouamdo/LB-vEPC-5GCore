@@ -1,0 +1,33 @@
+version: "3.9"
+   
+services:
+  mme-lb:
+      container_name: "mme-lb"
+      tty: true
+      image: ubuntu:focal
+      privileged: true
+      command: >
+        sh -c  "apt-get update && apt-get install -y iptables ipvsadm iproute2 inetutils-ping fping tcpdump &&  
+        ip link set up tunl0 && ip addr add 20.20.20.1 dev tunl0 && echo 1 > /proc/sys/net/ipv4/ip_forward && 
+        bash /root/ipvs.sh"
+      volumes:
+      - ../ipvs-srsran-open5gs-configs/ipvs-config/ipvs.sh:/root/ipvs.sh
+      networks:
+        default:
+          ipv4_address: 10.240.233.190
+  srsran:
+      container_name: "srsran"
+      image: registry.gitlab.com/infinitydon/registry/srslte:latest
+      tty: true
+      privileged: true     
+      volumes:
+      - ../ipvs-srsran-open5gs-configs/srsLTE-config/enb/enb.conf:/srsLTE/build/srsenb/src/enb.conf
+      - ../ipvs-srsran-open5gs-configs/srsLTE-config/enb/drb.conf:/srsLTE/build/srsenb/src/drb.conf
+      - ../ipvs-srsran-open5gs-configs/srsLTE-config/enb/rr.conf:/srsLTE/build/srsenb/src/rr.conf
+      - ../ipvs-srsran-open5gs-configs/srsLTE-config/enb/sib.conf:/srsLTE/build/srsenb/src/sib.conf
+      - ../ipvs-srsran-open5gs-configs/srsLTE-config/ue/ue.conf:/srsLTE/build/srsue/src/ue.conf
+      depends_on:
+      - mme-lb
+      networks:
+          default:
+              ipv4_address: 10.240.233.180
