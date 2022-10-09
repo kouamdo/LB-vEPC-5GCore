@@ -1,9 +1,18 @@
-db_uri: mongodb://mongodb/open5gs
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-pcrf-config
+  namespace: open5gs
+  labels:
+    epc-mode: pcrf
+data:
+  pcrf.yaml: |
+    db_uri: mongodb://mongodb/open5gs
     
-logger:
-    file: /var/log/open5gs/hss.log
-    
-parameter:
-    
-pcrf:
-    freeDiameter: /open5gs/config-map/pcrf-diameter.yaml
+    logger:
+        file: /var/log/open5gs/hss.log
+        
+    parameter:
+        
+    pcrf:
+        freeDiameter: /open5gs/config-map/pcrf-diameter.yaml

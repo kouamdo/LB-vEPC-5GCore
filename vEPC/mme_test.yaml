@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mme-open5gs-mme-diameter
+  name: mme-3-diameter-open5gs-mme
   labels:
     app.kubernetes.io/name: open5gs-mme
     helm.sh/chart: open5gs-mme-2.0.3
@@ -234,7 +234,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mme-open5gs-mme
+  name: mme-3-open5gs-mme
   labels:
     app.kubernetes.io/name: open5gs-mme
     helm.sh/chart: open5gs-mme-2.0.3
@@ -276,7 +276,7 @@ data:
         ciphering_order : [ EEA0, EEA1, EEA2 ]
       network_name:
         full: Gradiant
-      mme_name: mme-open5gs-mme
+      mme_name: mme-3-open5gs-mme
     
     sgwc:
       gtpc:
@@ -343,7 +343,7 @@ spec:
       volumes:
         - name: diameter-config
           configMap:
-            name: mme-open5gs-mme-diameter
+            name: mme-3-diameter-open5gs-mme
         - name: config
           configMap:
-            name: mme-open5gs-mme
+            name: mme-3-open5gs-mme
