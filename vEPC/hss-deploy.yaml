@@ -31,8 +31,8 @@ spec:
     spec:
       containers:
         - name: hss
-          image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
-          imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
+          image: registry.gitlab.com/infinitydon/registry/open5gs-aio:v2.4.9-prom
+          imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c"]
           args:
           - sleep 10;
@@ -43,21 +43,11 @@ spec:
             subPath: "hss.yaml"
           - name: open5gs-hss-diameter
             mountPath: /open5gs/config-map/diameter-hss.conf
-            subPath: "diameter-hss.conf"            
-          - mountPath: "/open5gs/diameter-ca/"
-            name: diameter-ca
-          - mountPath: "/open5gs/tls/"
-            name: hss-tls                   
+            subPath: "diameter-hss.conf"              
       volumes:
         - name: open5gs-hss-config
           configMap:
             name: open5gs-hss-config
         - name: open5gs-hss-diameter
           configMap:
-            name: open5gs-hss-diameter           
-        - name: diameter-ca
-          secret:
-            secretName: {{ .Values.diameter.caSecretName }}  
-        - name: hss-tls
-          secret:
-            secretName: {{ .Values.hss.tlsSecretName }}                                               
+            name: open5gs-hss-diameter                                          
