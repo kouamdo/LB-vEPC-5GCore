@@ -46,7 +46,7 @@ data:
     while true; do
         for I in {73,74};do 
 
-            Host=10.240.216.$I
+            Host=10.240.233.$I
 
             fping -c3 -t300 $Host 2>/dev/null 1>/dev/null
 
