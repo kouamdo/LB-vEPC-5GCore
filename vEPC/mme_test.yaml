@@ -299,7 +299,7 @@ spec:
   template:
     metadata:
       annotations:
-        "cni.projectcalico.org/ipAddrs": "[\"10.240.233.198\"]"
+        "cni.projectcalico.org/ipAddrs": "[\"10.240.233.187\"]"
       labels:
         app: mme-test
     spec:

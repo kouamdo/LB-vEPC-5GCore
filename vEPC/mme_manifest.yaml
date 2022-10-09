@@ -300,7 +300,7 @@ spec:
   template:
     metadata:
       annotations:
-        "cni.projectcalico.org/ipAddrs": "[\"10.240.233.197\"]"
+        "cni.projectcalico.org/ipAddrs": "[\"10.240.233.185\"]"
       labels:
         app: mme-1
     spec:
