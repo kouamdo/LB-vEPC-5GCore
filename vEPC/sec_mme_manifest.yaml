@@ -229,7 +229,6 @@ data:
     #ConnectPeer = "aaa.wide.ad.jp";
     #ConnectPeer = "old.diameter.serv" { TcTimer = 60; TLS_old_method; No_SCTP; Port=3868; } ;
     ConnectPeer = "hss.localdomain" { ConnectTo = "open5gs-hss"; No_TLS; };
-    ##############################################################
 ---
 # Source: open5gs-mme/templates/configmap.yaml
 apiVersion: v1

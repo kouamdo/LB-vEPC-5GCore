@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 data:
   mme.conf: |
-   # This is a sample configuration file for freeDiameter daemon.
+    # This is a sample configuration file for freeDiameter daemon.
     # Most of the options can be omitted, as they default to reasonable values.
     # Only TLS-related options must be configured properly in usual setups.
     # It is possible to use "include" keyword to import additional files
@@ -229,7 +229,6 @@ data:
     #ConnectPeer = "aaa.wide.ad.jp";
     #ConnectPeer = "old.diameter.serv" { TcTimer = 60; TLS_old_method; No_SCTP; Port=3868; } ;
     ConnectPeer = "hss.localdomain" { ConnectTo = "open5gs-hss"; No_TLS; };
-    ##############################################################
 ---
 # Source: open5gs-mme/templates/configmap.yaml
 apiVersion: v1
