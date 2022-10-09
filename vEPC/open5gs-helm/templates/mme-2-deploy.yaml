@@ -60,10 +60,4 @@ spec:
             name: open5gs-mme-2-config
         - name: open5gs-mme-diameter
           configMap:
-            name: open5gs-mme-2-diameter
-        - name: diameter-ca
-          secret:
-            secretName: {{ .Values.diameter.caSecretName }}  
-        - name: mme-tls
-          secret:
-            secretName: {{ .Values.mme.tlsSecretName }}                
+            name: open5gs-mme-2-diameter       
