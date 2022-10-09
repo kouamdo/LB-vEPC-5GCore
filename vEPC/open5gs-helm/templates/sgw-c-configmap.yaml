@@ -16,10 +16,13 @@ data:
     sgwc:
         gtpc:
            dev: eth0
+           port: 2123
         pfcp:
            dev: eth0
+           port: 8805
 
     sgwu:
       pfcp:
         - name: open5gs-sgwu
+          port: 8805
           apn: {{ .Values.apn }}

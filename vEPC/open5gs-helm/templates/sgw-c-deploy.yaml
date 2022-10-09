@@ -1,7 +1,26 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: open5gs-sgwc
+  name: sgwc-open5gs-sgwc-gtpc
+  namespace: open5gs
+  labels:
+    epc-mode: sgwc
+spec:
+  type: ClusterIP
+  ports:
+    - name: gtpc
+      port: 2123
+      protocol: UDP
+      targetPort: gtpc
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    epc-mode: sgwc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-sgwc-pfcp
   namespace: open5gs
   labels:
     epc-mode: sgwc
@@ -9,9 +28,11 @@ spec:
   selector:
     epc-mode: sgwc
   ports:
-  - protocol: UDP
-    name: gtpc  
-    port: 2123   
+  - name: pfcp
+      port: 8805
+      protocol: UDP
+      targetPort: pfcp
+      nodePort: null   
 ---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
@@ -38,6 +59,13 @@ spec:
         args:
         - sleep 10;
           open5gs-sgwcd -c /open5gs/config-map/sgwc.yaml;
+        ports:
+          - name: pfcp
+            containerPort: 8805
+            protocol: UDP
+          - name: gtpc
+            containerPort: 2123
+            protocol: UDP
         volumeMounts:
           - name: open5gs-sgwc-config
             mountPath: /open5gs/config-map/sgwc.yaml

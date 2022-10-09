@@ -16,9 +16,11 @@ data:
     sgwu:
         gtpu:
            dev: eth0
+           port: 2152
         pfcp:
            dev: eth0
+           port: 8805
 
-    #sgwc:
-    #  pfcp:
-    #    - name: sgwcPFCP-open5gs.service.open5gs
+    sgwc:
+      pfcp:
+        - name: open5gs-sgwc-pfcp
