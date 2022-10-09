@@ -29,10 +29,10 @@ spec:
     epc-mode: sgwc
   ports:
   - name: pfcp
-      port: 8805
-      protocol: UDP
-      targetPort: pfcp
-      nodePort: null   
+    port: 8805
+    protocol: UDP
+    targetPort: pfcp
+    nodePort: null   
 ---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
