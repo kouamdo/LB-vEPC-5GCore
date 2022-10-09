@@ -41,7 +41,7 @@ data:
           - name: open5gs-sgwc
     smf:
       gtpc:
-        - name: open5gs-smf
+        - name: core5g-smf
     metrics:
         addr: 0.0.0.0
         port: 9090        
