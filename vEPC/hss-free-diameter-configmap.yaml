@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: open5gs-hss-diameter
-  namespace: open5gs
   labels:
     epc-mode: hss
 data:
