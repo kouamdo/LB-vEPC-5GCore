@@ -1,9 +1,0 @@
-db_uri: mongodb://mongodb/open5gs
-    
-logger:
-    file: /var/log/open5gs/hss.log
-    
-parameter:
-    
-pcrf:
-    freeDiameter: /open5gs/config-map/pcrf-diameter.yaml
