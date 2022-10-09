@@ -23,6 +23,6 @@ data:
 
     sgwu:
       pfcp:
-        - name: open5gs-sgwu
+        - name: open5gs-sgwu-pfcp
           port: 8805
           apn: {{ .Values.apn }}
