@@ -9,7 +9,7 @@ spec:
   template:
     metadata:
       labels:
-        app: srsœ
+        app: srs
     spec:
       containers:
       - name: srs
