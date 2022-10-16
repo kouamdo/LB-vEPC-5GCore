@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: srsLTE-LB
+  name: srsLTE
 spec:
   selector:
     matchLabels:
-      app: srsLTE-LB
+      app: srsLTE
   template:
     metadata:
       labels:
-        app: srsLTE-LB
+        app: srsLTE
     spec:
       containers:
-      - name: srsLTE-LB
+      - name: srsLTE
         image: registry.gitlab.com/infinitydon/registry/srslte:latest
         imagePullPolicy: IfNotPresent
         securityContext:
