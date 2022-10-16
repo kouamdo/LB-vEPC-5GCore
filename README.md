@@ -14,32 +14,13 @@ Run vEPC network by typing :
 ```
 cd LB-VEPC-5GCORE/VEPC-service/
 helm upgrade --install  core4g -n open5gs .
-cd 
 ```
 vEPC use static IPV4 addresses , you cancheck it by typing 
 
 ```
-kubectl get pods -n ope5gs -owide
+kubectl get pods -n open5gs -owide
 ```
 
 assuming that all pods are running well and you want to mount NAT LB for exemple. So we will deploy it using docker container
 
-Create docker LB container
-
-```
-docker run -it --name mme-lb --privileged ubuntu:focal
-```
-
-```
-cat << EOF > ./account.js
-
-EOF
-```
-
-
-
-To have more about tracability see the LB by typing in another terminal :
-
-```
-kubectl logs mme-lb
-```
+Finally , you can look at the log inside srsLTE_LB pods
