@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: srsLTE_LB
+spec:
+  selector:
+    matchLabels:
+      app: srsLTE_LB
+  template:
+    metadata:
+      labels:
+        app: srsLTE_LB
+    spec:
+      containers:
+      - name: srsLTE_LB
+        image: registry.gitlab.com/infinitydon/registry/srslte:latest
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true        
+        command: ["/bin/sh", "-c"]
+        args:
+        - ip route add 20.20.20.1 via 10.240.233.75 && ip netns add ue1 && bash
+        volumeMounts:
+        - name: srs-enb-conf
+          mountPath: /srsLTE/build/srsenb/src/enb.conf
+          subPath: "enb.conf"
+        - name: srs-drb-conf
+          mountPath: /srsLTE/build/srsenb/src/drb.conf
+          subPath: "drb.conf"
+        - name: srs-rr-conf
+          mountPath: /srsLTE/build/srsenb/src/rr.conf
+          subPath: "rr.conf"
+        - name: srs-sib-conf
+          mountPath: /srsLTE/build/srsenb/src/sib.conf
+          subPath: "sib.conf"
+        - name: srs-ue-conf
+          mountPath: /srsLTE/build/srsue/src/ue.conf
+          subPath: "ue.conf"
+      volumes:
+        - name: srs-enb-conf
+          hostPath:
+            path: ./srsLTE-config/enb/enb.conf
+        - name: srs-drb-conf
+          hostPath:
+            path: ./srsLTE-config/enb/drb.conf
+        - name: srs-rr-conf
+          hostPath:
+            path: ./srsLTE-config/enb/rr.conf
+        - name: srs-sib-conf
+          hostPath:
+            path: ./srsLTE-config/enb/sib.conf
+        - name: srs-ue-conf
+          hostPath:
+            path: /srsLTE-config/ue/ue.conf
