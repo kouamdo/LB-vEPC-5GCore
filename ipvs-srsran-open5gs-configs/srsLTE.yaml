@@ -34,21 +34,25 @@ spec:
       volumes:
         - name: srs-enb-conf
           hostPath:
-            path: ./srsLTE-config/enb/enb.conf
+            path: /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/enb/enb.conf
             type: FileOrCreate
         - name: srs-drb-conf
           hostPath:
-            path: ./srsLTE-config/enb/drb.conf
+            path: /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/enb/drb.conf
             type: FileOrCreate
         - name: srs-rr-conf
           hostPath:
-            path: ./srsLTE-config/enb/rr.conf
+            path: /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/enb/rr.conf
             type: FileOrCreate
         - name: srs-sib-conf
           hostPath:
-            path: ./srsLTE-config/enb/sib.conf
+            path: /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/enb/sib.conf
             type: FileOrCreate
         - name: srs-ue-conf
           hostPath:
-            path: /srsLTE-config/ue/ue.conf
+            path: /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/ue/ue.conf
             type: FileOrCreate
+
+
+
+#docker run -it --name srs -v /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/enb/enb.conf:/srsLTE/build/srsenb/src/enb.conf -v /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/enb/drb.conf:/srsLTE/build/srsenb/src/drb.conf -v /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/enb/rr.conf:/srsLTE/build/srsenb/src/rr.conf -v /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/enb/sib.conf:/srsLTE/build/srsenb/src/sib.conf -v /root/LB-vEPC-5GCore/ipvs-srsran-open5gs-configs/srsLTE-config/ue/ue.conf:/srsLTE/build/srsue/src/ue.conf registry.gitlab.com/infinitydon/registry/srslte:latest bash
