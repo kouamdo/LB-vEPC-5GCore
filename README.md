@@ -23,7 +23,7 @@ kubectl get pods -n open5gs -owide
 
 assuming that all pods are running well and you want to mount NAT LB for exemple. So we will deploy it using docker container
 
-Finally , you can look at the log inside srsLTE_LB pods
+Finally , you can look at the log inside srsLTE_LB with full NAT pods
 
 ```
 docker run -it --privileged --name mme-lb ubuntu:focal bash
@@ -43,3 +43,8 @@ ipvsadm -a --sctp-service 172.17.0.2:36412 -r 10.240.233.73:36412 -m
 Knowing that 
 *172.17.0.2* is the IP address of the Load balancer
 *10.240.233.73* , *10.240.233.74* is the IP address of the 2 MMEs
+
+You can capture all packet inside container by :
+```
+tcpdump -nnni eth0 sctp port 36412
+```
