@@ -23,32 +23,32 @@ spec:
         volumeMounts:
         - name: srs-enb-conf
           mountPath: /srsLTE/build/srsenb/src/enb.conf
-          subPath: "enb.conf"
         - name: srs-drb-conf
           mountPath: /srsLTE/build/srsenb/src/drb.conf
-          subPath: "drb.conf"
         - name: srs-rr-conf
           mountPath: /srsLTE/build/srsenb/src/rr.conf
-          subPath: "rr.conf"
         - name: srs-sib-conf
           mountPath: /srsLTE/build/srsenb/src/sib.conf
-          subPath: "sib.conf"
         - name: srs-ue-conf
           mountPath: /srsLTE/build/srsue/src/ue.conf
-          subPath: "ue.conf"
       volumes:
         - name: srs-enb-conf
           hostPath:
             path: ./srsLTE-config/enb/enb.conf
+            type: FileOrCreate
         - name: srs-drb-conf
           hostPath:
             path: ./srsLTE-config/enb/drb.conf
+            type: FileOrCreate
         - name: srs-rr-conf
           hostPath:
             path: ./srsLTE-config/enb/rr.conf
+            type: FileOrCreate
         - name: srs-sib-conf
           hostPath:
             path: ./srsLTE-config/enb/sib.conf
+            type: FileOrCreate
         - name: srs-ue-conf
           hostPath:
             path: /srsLTE-config/ue/ue.conf
+            type: FileOrCreate
