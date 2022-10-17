@@ -12,7 +12,7 @@ Those entities of 5GCore and vEPCrun using kubernetes
 Run vEPC network by typing :
 
 ```
-cd LB-VEPC-5GCORE/VEPC-service/
+cd LB-VEPC-5GCORE/vEPC-service/
 helm upgrade --install  core4g -n open5gs .
 ```
 vEPC use static IPV4 addresses , you cancheck it by typing 
