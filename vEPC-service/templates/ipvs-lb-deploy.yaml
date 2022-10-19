@@ -27,7 +27,7 @@ spec:
         args:
         - sleep 10;
           apt-get update && apt-get install -y ipvsadm iproute2 inetutils-ping fping tcpdump iptables;
-          ip link set up tunl0 && ip addr add 20.20.20.1 dev tunl0 && echo 1 > /proc/sys/net/ipv4/ip_forward;
+          ip link set up tunl0 && ip addr add 10.240.233.215 dev tunl0 && echo 1 > /proc/sys/net/ipv4/ip_forward;
           bash /root/ipvs.sh
         volumeMounts:
         - name: lb-script
