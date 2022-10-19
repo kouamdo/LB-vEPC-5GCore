@@ -19,7 +19,7 @@ spec:
           privileged: true        
         command: ["/bin/sh", "-c"]
         args:
-        - ip route add 20.20.20.0/24 via 10.240.233.75 && ip netns add ue1 && bash
+        - ip route add 10.240.230.0/24 via 10.240.233.75 && ip netns add ue1 && bash
         volumeMounts:
         - name: srs-enb-conf
           mountPath: /srsLTE/build/srsenb/src/enb.conf

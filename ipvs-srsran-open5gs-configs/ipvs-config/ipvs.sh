@@ -4,7 +4,7 @@ exec 1> /var/log/ipvsadm-log.txt 2>&1
 set -x
 
 IPVS=/usr/sbin/ipvsadm
-VIP=20.20.20.1 #Define VIP
+VIP=10.240.230.0 #Define VIP
 VPORT=36412 #Define the virtual port of LVS
 RPORT=36412 #Define the port of Realserver
 
@@ -35,7 +35,7 @@ add_realserver() {  #Define the function of adding Realserver
 }
 
 while true; do
-    for I in {197,198,199};do 
+    for I in {73,74};do 
 
         Host=10.240.233.$I
 
