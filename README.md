@@ -34,11 +34,11 @@ inside de container:
 ```
 apt-get update && apt-get install -y iptables ipvsadm iproute2 inetutils-ping fping tcpdump
 sysctl -w net.ipv4.vs.conntrack=1
-iptables -t nat -A POSTROUTING -o eth0 --dst 10.240.233.72 -m ipvs --ipvs --vaddr 172.17.0.2 --vport 36412 --vmethod masq -j SNAT --to-source 172.17.0.2
-iptables -t nat -A POSTROUTING -o eth0 --dst 10.240.233.76 -m ipvs --ipvs --vaddr 172.17.0.2 --vport 36412 --vmethod masq -j SNAT --to-source 172.17.0.2
-ipvsadm -A --sctp-service 172.17.0.2:36412 -s rr
-ipvsadm -a --sctp-service 172.17.0.2:36412 -r 10.240.233.72:36412 -m
-ipvsadm -a --sctp-service 172.17.0.2:36412 -r 10.240.233.76:36412 -m
+iptables -t nat -A POSTROUTING -o eth0 --dst 10.240.233.72 -m ipvs --ipvs --vaddr 172.17.0.6 --vport 38412 --vmethod masq -j SNAT --to-source 172.17.0.6
+iptables -t nat -A POSTROUTING -o eth0 --dst 10.240.233.76 -m ipvs --ipvs --vaddr 172.17.0.6 --vport 38412 --vmethod masq -j SNAT --to-source 172.17.0.6
+ipvsadm -A --sctp-service 172.17.0.6:38412 -s wrr
+ipvsadm -a --sctp-service 172.17.0.6:38412 -r 10.240.233.72:38412 --gatewaying --weight 3
+ipvsadm -a --sctp-service 172.17.0.6:38412 -r 10.240.233.76:38412 --gatewaying --weight 5
 ```
 Knowing that 
 *172.17.0.2* is the IP address of the Load balancer
