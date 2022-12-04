@@ -48,3 +48,23 @@ You can capture all packet inside container by :
 ```
 tcpdump -nnni eth0 sctp port 36412
 ```
+Trying to generate a lot of UEs for example , we should go inside the UEran pod and :
+```
+cat > ue_gen.sh <<EOF
+#!/bin/sh
+
+i=1
+
+while :
+do
+	echo $i
+	./nr-ue -c open5gs-ue.yaml -n 10 -i imsi-28601000000000$i &
+	sleep 1
+	i=$(($i + 11))
+done
+
+EOF
+
+chmod +x ue_gen.sh
+bash ue_gen.sh
+```
