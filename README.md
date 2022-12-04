@@ -36,9 +36,11 @@ apt-get update && apt-get install -y iptables ipvsadm iproute2 inetutils-ping fp
 sysctl -w net.ipv4.vs.conntrack=1
 iptables -t nat -A POSTROUTING -o eth0 --dst 10.240.233.72 -m ipvs --ipvs --vaddr 172.17.0.6 --vport 38412 --vmethod masq -j SNAT --to-source 172.17.0.6
 iptables -t nat -A POSTROUTING -o eth0 --dst 10.240.233.76 -m ipvs --ipvs --vaddr 172.17.0.6 --vport 38412 --vmethod masq -j SNAT --to-source 172.17.0.6
-ipvsadm -A --sctp-service 172.17.0.6:38412 -s wrr
-ipvsadm -a --sctp-service 172.17.0.6:38412 -r 10.240.233.72:38412 --gatewaying --weight 3
-ipvsadm -a --sctp-service 172.17.0.6:38412 -r 10.240.233.76:38412 --gatewaying --weight 5
+ipvsadm --clear
+ipvsadm -A --sctp-service 172.17.0.6:38412 -s wlc
+ipvsadm -a --sctp-service 172.17.0.6:38412 -r 10.240.233.72:38412 -m -w 10
+ipvsadm -a --sctp-service 172.17.0.6:38412 -r 10.240.233.76:38412 -m -w 30
+watch ipvsadm -ln --stats
 ```
 Knowing that 
 *172.17.0.2* is the IP address of the Load balancer
@@ -49,22 +51,4 @@ You can capture all packet inside container by :
 tcpdump -nnni eth0 sctp port 36412
 ```
 Trying to generate a lot of UEs for example , we should go inside the UEran pod and :
-```
-cat > ue_gen.sh <<EOF
-#!/bin/sh
 
-i=1
-
-while :
-do
-	echo $i
-	./nr-ue -c open5gs-ue.yaml -n 10 -i imsi-28601000000000$i &
-	sleep 1
-	i=$(($i + 11))
-done
-
-EOF
-
-chmod +x ue_gen.sh
-bash ue_gen.sh
-```
