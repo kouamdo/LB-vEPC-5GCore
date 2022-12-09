@@ -32,6 +32,11 @@ spec:
       labels:
         epc-mode: mme-2
     spec:  
+      tolerations:
+      - key: "infra"
+        operator: "Equal"
+        value: "agw_2"
+        effect: "NoSchedule"
       containers:
       - name: mme
         image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
