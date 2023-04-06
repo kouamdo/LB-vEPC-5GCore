@@ -307,6 +307,8 @@ In LoxiLB ***fullnat*** mode can also be enabled depending on the use-case espec
 
 inside lb pod , remove previous and add another one :
 
+netmask use case ![image](https://user-images.githubusercontent.com/39982727/230312942-7a62a64a-f07e-49f5-8bb9-9db9764a42f0.png)
+there for example , whe are trying to use AMF-3 if AMF-1 or/and AMF-2 is not available
 ```
 loxicmd delete lb 20.20.20.1 --sctp 38412
 loxicmd get lb
