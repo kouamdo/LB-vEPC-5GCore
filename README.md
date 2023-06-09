@@ -1,15 +1,9 @@
 # LB-vEPC-5GCore
-Load balancing implementation for vEPC and 5G Core
-
-Repo show Load balancing with DSR IPIP .
-
-HSS and PCRF are not available.
+Load balancing implementation for 5G Core
 
 Please , firstly , try to read this [repo](https://bitbucket.org/infinitydon/opensource-5g-core-service-mesh/src/main/) to deploy full 5G Core
 
 Those entities of 5GCore is using kubernetes
-
-vEPC use static IPV4 addresses , you can check it by typing 
 
 ```
 kubectl get pods -n open5gs -owide
