@@ -7,14 +7,8 @@ HSS and PCRF are not available.
 
 Please , firstly , try to read this [repo](https://bitbucket.org/infinitydon/opensource-5g-core-service-mesh/src/main/) to deploy full 5G Core
 
-Those entities of 5GCore and vEPCrun using kubernetes
+Those entities of 5GCore is using kubernetes
 
-Run vEPC network by typing :
-
-```
-cd LB-VEPC-5GCORE/vEPC-service/
-helm upgrade --install  core5g -n open5gs .
-```
 vEPC use static IPV4 addresses , you can check it by typing 
 
 ```
@@ -25,15 +19,16 @@ We will try to go through kube loxi , This also allows us to have different load
 follow this [link](https://github.com/loxilb-io/kube-loxilb) to install loxilb and kube loxi.
 *In my case i have installed loxilb with docker*.
 
-after installe it , change the loxiURL inside kube-loci.yaml with the good ip address coming from  the loxi docker container.
+after install it , change the loxiURL inside kube-loci.yaml with the good ip address coming from  the loxi docker container.
 after all config are made , even load balancer service , you should have this :
+
 ![image](https://github.com/kouamdo/LB-vEPC-5GCore/assets/39982727/b862bb66-8230-4752-b85c-14f097b40308)
 
 in the same way , try to check if your service was getting the right external-ip 
 
 ![image](https://github.com/kouamdo/LB-vEPC-5GCore/assets/39982727/fab7a0f2-ebfc-4c82-a77c-19dc6d37a09a)
 
-So if you take the trouble to remove the static IP addresses assigned to the AMF and then create replicas, you'll see the output and the state of the loxilb loadbalancer.
+So if you try to remove the static IP addresses assigned to the AMF and then create replicas and the IP address assigned inside gnb config to reach AMF (to 123.123.123.1 for example), you'll see the output and the state of the loxilb loadbalancer.
 
 you may notice at the gnb exit:
 
