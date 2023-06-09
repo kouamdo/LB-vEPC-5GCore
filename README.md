@@ -13,42 +13,26 @@ Run vEPC network by typing :
 
 ```
 cd LB-VEPC-5GCORE/vEPC-service/
-helm upgrade --install  core4g -n open5gs .
+helm upgrade --install  core5g -n open5gs .
 ```
-vEPC use static IPV4 addresses , you cancheck it by typing 
+vEPC use static IPV4 addresses , you can check it by typing 
 
 ```
 kubectl get pods -n open5gs -owide
 ```
+We will try to go through kube loxi , This also allows us to have different load-balancers working together in the same K8s environment.
 
-assuming that all pods are running well and you want to mount NAT LB for exemple. So we will deploy it using docker container
+follow this [link](https://github.com/loxilb-io/kube-loxilb) to install loxilb and kube loxi.
+*In my case i have installed loxilb with docker*.
 
-Finally , you can look at the log inside srsLTE_LB with full NAT pods
+after installe it , change the loxiURL inside kube-loci.yaml with the good ip address coming from  the loxi docker container.
+after all config are made , even load balancer service , you should have this :
+![image](https://github.com/kouamdo/LB-vEPC-5GCore/assets/39982727/b862bb66-8230-4752-b85c-14f097b40308)
+
+So you can get the status wuith : 
 
 ```
-docker run -it --privileged --name mme-lb ubuntu:focal bash
+docker exec -it loxilb loxicmd get ct  -o wide
 ```
 
-inside de container:
-
-```
-apt-get update && apt-get install -y iptables ipvsadm iproute2 inetutils-ping fping tcpdump
-sysctl -w net.ipv4.vs.conntrack=1
-iptables -t nat -A POSTROUTING -o eth0 --dst 10.240.233.72 -m ipvs --ipvs --vaddr 172.17.0.6 --vport 38412 --vmethod masq -j SNAT --to-source 172.17.0.6
-iptables -t nat -A POSTROUTING -o eth0 --dst 10.240.233.76 -m ipvs --ipvs --vaddr 172.17.0.6 --vport 38412 --vmethod masq -j SNAT --to-source 172.17.0.6
-ipvsadm --clear
-ipvsadm -A --sctp-service 172.17.0.6:38412 -s wlc
-ipvsadm -a --sctp-service 172.17.0.6:38412 -r 10.240.233.72:38412 -m -w 10
-ipvsadm -a --sctp-service 172.17.0.6:38412 -r 10.240.233.76:38412 -m -w 30
-watch ipvsadm -ln --stats
-```
-Knowing that 
-*172.17.0.2* is the IP address of the Load balancer
-*10.240.233.73* , *10.240.233.74* is the IP address of the 2 MMEs
-
-You can capture all packet inside container by :
-```
-tcpdump -nnni eth0 sctp port 36412
-```
-Trying to generate a lot of UEs for example , we should go inside the UEran pod and :
 
